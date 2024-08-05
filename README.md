@@ -1,52 +1,118 @@
-# API de Gestión de Productos y Clientes
+# Proyecto Final de Java - Prototipo
 
-Este proyecto es una API RESTful desarrollada con Spring Boot para gestionar productos y clientes.
+**Autor:** Ian Franco Collada Pontorno
 
-## Instrucciones de Uso
+## Presentación
 
-### Pasos para Utilizar la API en Postman
+Este proyecto es mi prototipo de proyecto final para Java. El objetivo de esta aplicación es gestionar comprobantes, clientes y productos utilizando Spring Boot. La aplicación proporciona una API REST para realizar operaciones CRUD sobre estas entidades.
 
-1. **Clonar el Proyecto**
+## Explicación
 
-   Clona este repositorio en tu máquina local:
+La aplicación está estructurada en varias capas, siguiendo el patrón de diseño de arquitectura en capas:
+- **Entidad**: Representa los datos y las relaciones del modelo.
+- **Repositorio**: Interfaz para interactuar con la base de datos.
+- **Servicio**: Contiene la lógica de negocio.
+- **Controlador**: Gestiona las solicitudes HTTP y devuelve respuestas.
 
+## Uso
 
+### Endpoints
+
+#### Crear Comprobante
+- **URL:** `/api/v1/receipts`
+- **Método:** `POST`
+- **Body:**
+  ```json
+  {
+      "client": {
+          "clientId": 1
+      },
+      "lines": [
+          {
+              "amount": 1,
+              "product": {
+                  "id": 1
+              }
+          }
+      ]
+  }
+# Ejemplo de Respuesta de la API y Scripts de Creación de Tablas
+
+## Ejemplo de Respuesta de la API
+
+Cuando se crea un comprobante, la respuesta de la API es similar a la siguiente:
+
+```json
+{
+    "id": 1,
+    "client": {
+        "id": 1,
+        "name": "John",
+        "lastname": "Doe",
+        "docnumber": "12345678901"
+    },
+    "createdAt": "2023-01-01T12:00:00",
+    "total": 100.0,
+    "details": [
+        {
+            "id": 1,
+            "product": {
+                "id": 1,
+                "description": "Product 1",
+                "code": "P001",
+                "stock": 10,
+                "price": 100.0
+            },
+            "amount": 1,
+            "price": 100.0
+        }
+    ]
+}
+
+# Scripts de Creación de Tablas
+
+Para configurar la base de datos, utiliza los siguientes scripts SQL para crear las tablas necesarias:
+
+```sql
+CREATE DATABASE mi_database_java;
+
+CREATE TABLE clients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(75),
+    lastname VARCHAR(75),
+    docnumber VARCHAR(11)
+);
+
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    description VARCHAR(150),
+    code VARCHAR(50),
+    stock INT,
+    price DOUBLE
+);
+
+CREATE TABLE receipts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    client_id INT,
+    created_at DATETIME,
+    total DOUBLE,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+);
+
+CREATE TABLE receipt_details (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    receipt_id INT,
+    product_id INT,
+    amount INT,
+    price DOUBLE,
+    FOREIGN KEY (receipt_id) REFERENCES receipts(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
 
 git clone https://github.com/Ian9Franco/Segunda-entrega-java-Ian-franco-collada-pontorno.git
 
+cd Segunda-entrega-java-Ian-franco-collada-pontorno
 
-2. **Configuración y Ejecución**
+./mvnw spring-boot:run
 
-- Asegúrate de tener configurado Java y Maven en tu entorno de desarrollo.
-- Importa el proyecto en tu IDE preferido (por ejemplo, IntelliJ IDEA).
 
-3. **Compilación y Ejecución**
-
-- Abre el proyecto en tu IDE y espera a que se resuelvan las dependencias.
-- Ejecuta la clase principal `AbmpfApplication.java` para iniciar la aplicación Spring Boot.
-
-4. **Acceder a la API desde Postman**
-
-- Abre Postman en tu máquina.
-- Utiliza las siguientes rutas para realizar las operaciones CRUD:
-
-    - **POST** `/api/v1/products`: Crea un producto.
-    - **GET** `/api/v1/products`: Obtiene todos los productos.
-    - **GET** `/api/v1/products/{pid}`: Obtiene un producto por su ID.
-    - **PUT** `/api/v1/products/{pid}`: Actualiza un producto por su ID.
-    - **POST** `/api/v1/auth/register`: Registra un cliente.
-
-5. **Enviar Solicitudes**
-
-- Para cada solicitud, asegúrate de configurar correctamente el cuerpo (payload) y los parámetros necesarios.
-- Ejecuta las solicitudes y verifica las respuestas recibidas.
-
-## Repositorio en GitHub
-
-Visita el repositorio en GitHub para más detalles y actualizaciones:
-
-[https://github.com/Ian9Franco/Segunda-entrega-java-Ian-franco-collada-pontorno](https://github.com/Ian9Franco/Segunda-entrega-java-Ian-franco-collada-pontorno)
-
-## Notas Adicionales
-
-- Este proyecto utiliza Spring Boot, Lombok, Spring Data JPA y MySQL como base de datos.
