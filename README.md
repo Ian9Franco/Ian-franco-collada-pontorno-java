@@ -109,6 +109,7 @@ CREATE TABLE receipt_details (
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
+
 git clone https://github.com/Ian9Franco/Segunda-entrega-java-Ian-franco-collada-pontorno.git
 
 cd Segunda-entrega-java-Ian-franco-collada-pontorno
